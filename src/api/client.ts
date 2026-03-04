@@ -20,7 +20,7 @@ export interface LighthouseResult {
 
 function getServerUrl(): string {
   return vscode.workspace.getConfiguration('rapidtriage').get('serverUrl', 
-    'https://rapidtriage-server-568288241317.us-central1.run.app');
+    'https://api.rapidtriage.me');
 }
 
 async function request<T>(method: string, path: string, body?: unknown): Promise<T> {
