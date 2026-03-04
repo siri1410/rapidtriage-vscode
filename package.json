@@ -1,0 +1,76 @@
+{
+  "name": "rapidtriage-vscode",
+  "displayName": "RapidTriageME — AI Error Triage",
+  "description": "AI-powered error triage, code fixes, and Lighthouse audits from your IDE.",
+  "version": "1.0.0",
+  "publisher": "yarlis",
+  "icon": "media/icon.png",
+  "repository": { "type": "git", "url": "https://github.com/siri1410/smartrapidtriage" },
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["AI", "Debuggers", "Other"],
+  "keywords": ["ai", "triage", "debugging", "error", "lighthouse", "mcp"],
+  "activationEvents": [
+    "onLanguage:typescript", "onLanguage:javascript", "onLanguage:python",
+    "onLanguage:go", "onLanguage:rust", "onLanguage:java",
+    "onCommand:rapidtriage.showPanel"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "rapidtriage.triageSelection", "title": "Triage Selection", "category": "RapidTriage", "icon": "$(search)" },
+      { "command": "rapidtriage.fixCurrentError", "title": "Fix Current Error", "category": "RapidTriage", "icon": "$(lightbulb)" },
+      { "command": "rapidtriage.runLighthouse", "title": "Run Lighthouse Audit", "category": "RapidTriage", "icon": "$(pulse)" },
+      { "command": "rapidtriage.showPanel", "title": "Show Triage Panel", "category": "RapidTriage", "icon": "$(layout-sidebar-right)" },
+      { "command": "rapidtriage.configureApiKey", "title": "Configure API Key", "category": "RapidTriage", "icon": "$(key)" },
+      { "command": "rapidtriage.clearHistory", "title": "Clear Triage History", "category": "RapidTriage", "icon": "$(trash)" },
+      { "command": "rapidtriage.refreshHistory", "title": "Refresh", "category": "RapidTriage", "icon": "$(refresh)" }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        { "id": "rapidtriage", "title": "RapidTriage", "icon": "media/icon-sidebar.svg" }
+      ]
+    },
+    "views": {
+      "rapidtriage": [
+        { "id": "rapidtriage.history", "name": "Triage History", "type": "tree" }
+      ]
+    },
+    "menus": {
+      "editor/context": [
+        { "command": "rapidtriage.triageSelection", "when": "editorHasSelection", "group": "rapidtriage@1" },
+        { "command": "rapidtriage.fixCurrentError", "group": "rapidtriage@2" }
+      ],
+      "view/title": [
+        { "command": "rapidtriage.refreshHistory", "when": "view == rapidtriage.history", "group": "navigation" },
+        { "command": "rapidtriage.clearHistory", "when": "view == rapidtriage.history", "group": "navigation" }
+      ]
+    },
+    "configuration": {
+      "title": "RapidTriageME",
+      "properties": {
+        "rapidtriage.serverUrl": {
+          "type": "string",
+          "default": "https://rapidtriage-server-568288241317.us-central1.run.app",
+          "description": "RapidTriage server URL"
+        },
+        "rapidtriage.enableCodeLens": { "type": "boolean", "default": true, "description": "Show Triage/Fix CodeLens above error patterns" },
+        "rapidtriage.enableInlineDecorations": { "type": "boolean", "default": true, "description": "Show AI confidence inline after triage" },
+        "rapidtriage.autoTriage": { "type": "boolean", "default": false, "description": "Auto-triage errors on file save" },
+        "rapidtriage.confidenceThreshold": { "type": "number", "default": 70, "minimum": 0, "maximum": 100, "description": "Min confidence % to show inline decoration" }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}
